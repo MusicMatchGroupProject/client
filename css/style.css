@@ -2,6 +2,9 @@ body {
   background-color: #7dc6eb;
     padding-top: 54px;
 }
+#app {
+  text-align: center;
+}
 .navbar {
     background-color: rgb(255, 153, 0);
 }
@@ -15,6 +18,9 @@ body {
     min-height: 100%;
     padding: 20px;
   }
+span {
+    padding: 0 10px;
+}
   
   #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
@@ -33,6 +39,37 @@ body {
     font-family: 'Pacifico', cursive;
     color: #40aadf;
   }
+  .form-control {
+    max-width: 50%;
+  }
+  .fa-microphone {
+    color : #40aadf; 
+  }
+  
+.liniear-wipe {
+    font-family: 'Chela One', cursive;
+    font-size: 6rem;
+    font-weight:  100;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #f3bb02;
+    background-image: -webkit-linear-gradient(92deg, #f326d1, #00ffdd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 1s infinite linear;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: rgb(255, 255, 255);
+  }
+  
+  @-webkit-keyframes hue {
+    from {
+      -webkit-filter: hue-rotate(0deg);
+    }
+    to {
+      -webkit-filter: hue-rotate(-360deg);
+    }
+  }
+  
   
   #formFooter {
     background-color: #f6f6f6;

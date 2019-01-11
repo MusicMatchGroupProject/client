@@ -4,25 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="google-signin-client_id" content="1057169530276-p11cs6dgri9i5mul9iktmo4at4pc75lu.apps.googleusercontent.com">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <meta name="google-signin-client_id" content="538354353006-m1asnrg9t3e0vp3j1tk30chuknv12dv7.apps.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css?family=Chela+One|Chewy|Pacifico" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <title>Document</title>
 </head>
 <body>
     <div id="app">
+        <div class="row">
 
+        </div>
+
+        <div class="container">
+            <img src="http://cdn.jalanroot.com/images/profile/16082018203028-apple_music_logo_by_mattroxzworld-d982zrj.png" style="width: 10%; height:10%">
+            <h1 class="title-app liniear-wipe">Music Match</h1>
+            <div class="input-group-append" style="margin-left:30%;text-align:center">
+                <input type="text" id="input-search" class="form-control" placeholder="Search song" aria-label="Search"
+                    aria-describedby="basic-addon2">
+                <button class="btn btn-outline-secondary bg-light" type="button" id="search"><i class="fas fa-microphone"></i></button>
+            </div>
+            <div class="form-check form-check-inline">
+                <span>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="artist" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Artist
+                    </label>
+                </span>
+                <span>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Song Tittle
+                    </label>
+                </span>
+            </div>
+        </div>
     </div>
     <div id="login">
         <div class="wrapper fadeInDown">
             <div id="formContent">
-                <!-- Icon -->
                 <div class="fadeIn first">
                 <img class="my-4" src="http://cdn.jalanroot.com/images/profile/16082018203028-apple_music_logo_by_mattroxzworld-d982zrj.png" style="width: 25%; height:25%">
                 <h1 class="title-app">MusicMatch</h1>
                 </div>
-                <!-- Login Form -->
                 <form id="login-form">
                     <input type="text" id="emailLogin" class="fadeIn second" name="login" placeholder="email">
                     <input type="password" id="passwordLogin" class="fadeIn third" name="login" placeholder="password">
@@ -40,7 +65,6 @@
     <div id="register">
         <div class="wrapper fadeInDown">
             <div id="formContent">
-                <!-- Icon -->
                 <div class="fadeIn first">
                 <img class="my-4" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Musixmatch_logo.svg/2000px-Musixmatch_logo.svg.png" style="width: 25%; height:25%">
                 <h1>MusicMatch</h1>
@@ -65,14 +89,46 @@
     </div>
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="music.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script>
     <script>
         $(document).ready(function() {
             console.log( "ready!" );
             checkLogin()
+            // notFound()
+            console.log($('input[name=exampleRadios]:checked').val());
         });
+        window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+        const recognition = new SpeechRecognition();
+        let textbox = document.querySelector('.form-control');
+        $('.btn').click(function () {
+            console.log('start recording');
+            record();
+        })
+        function record() {
+            recognition.start();
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                console.log(speechToText,"=======");
+                $('.form-control').val(speechToText);
+            }
+            recognition.onspeechend = function() {
+                recognition.stop();
+            }
+        }
+        function notFound(){
+            $.get("http://localhost:3000/voice/", function( data ){
+                var audio = new Audio(data)
+                audio.play()
+            })
+        }
+        $('#search').click(function() {
+            recognition.start();
+            console.log('Ready to receive a color command.');
+        })
         $('#login-form').submit(function(e){
             e.preventDefault();
             var input = {
@@ -124,7 +180,8 @@
                 $('#app').show()
                 $('#login').hide()
                 $('#register').hide()
-                // getMyStar()
+                getTopSong()
+
             }else{
                 $('#app').hide()
                 $('#register').hide()
