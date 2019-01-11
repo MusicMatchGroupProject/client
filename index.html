@@ -14,15 +14,30 @@
 <body>
     <div id="app">
         <div class="container">
+            <img src="http://cdn.jalanroot.com/images/profile/16082018203028-apple_music_logo_by_mattroxzworld-d982zrj.png" style="width: 10%; height:10%">
             <h1 class="title-app liniear-wipe">Music Match</h1> 
             <div class="input-group-append" style="margin-left:30%;text-align:center">
-                <input type="text" class="form-control" placeholder="Search song" aria-label="Search"
+                <input type="text" id="input-search" class="form-control" placeholder="Search song" aria-label="Search"
                     aria-describedby="basic-addon2">
                 <button class="btn btn-outline-secondary bg-light" type="button" id="search"><i class="fas fa-microphone"></i></button>
             </div>
+            <div class="form-check form-check-inline">
+                <span>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="artist" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Artist
+                    </label>
+                </span>
+                <span>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Song Tittle
+                    </label>
+                </span>
+            </div>
         </div>
     </div>
-    <!-- <div id="login">
+    <div id="login">
         <div class="wrapper fadeInDown">
             <div id="formContent">
                 <div class="fadeIn first">
@@ -63,7 +78,7 @@
                 </div>
             </div>
         </div>  
-    </div> -->
+    </div> 
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -74,6 +89,7 @@
             console.log( "ready!" );
             checkLogin()
             // notFound()
+            console.log($('input[name=exampleRadios]:checked').val());
         });
         window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
         const recognition = new SpeechRecognition();
