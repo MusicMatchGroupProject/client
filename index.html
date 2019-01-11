@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="google-signin-client_id" content="538354353006-m1asnrg9t3e0vp3j1tk30chuknv12dv7.apps.googleusercontent.com">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet"> 
+    <meta name="google-signin-client_id" content="1057169530276-p11cs6dgri9i5mul9iktmo4at4pc75lu.apps.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <title>Document</title>
@@ -24,18 +24,18 @@
                 </div>
                 <!-- Login Form -->
                 <form id="login-form">
-                    <input type="text" id="emailLogin" class="fadeIn second" name="login" placeholder="username">
+                    <input type="text" id="emailLogin" class="fadeIn second" name="login" placeholder="email">
                     <input type="password" id="passwordLogin" class="fadeIn third" name="login" placeholder="password">
                     <input type="submit"  class="fadeIn fourth" value="Log In">
                 </form>
-            
+
                 <!-- Remind Passowrd -->
                 <div id="formFooter">
                     <a class="g-signin2" data-onsuccess="onSignIn"></a>
-                    <a class="underlineHover" href="#"> Register</a>
+                    <a class="underlineHover" onclick="register()" href="#"> Register</a>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
     <div id="register">
         <div class="wrapper fadeInDown">
@@ -45,22 +45,23 @@
                 <img class="my-4" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Musixmatch_logo.svg/2000px-Musixmatch_logo.svg.png" style="width: 25%; height:25%">
                 <h1>MusicMatch</h1>
                 </div>
-                <!-- Login Form -->
-                <form id="login-form">
-                    <input type="text" id="emailRegister" class="fadeIn second" name="register" placeholder="username">
+                <!-- Register Form -->
+                <form id="register-form">
+                    <input type="text" id="emailRegister" class="fadeIn second" name="register" placeholder="email">
                     <input type="password" id="passwordRegister" class="fadeIn third" name="register" placeholder="password">
                     <input type="text" id="firstName" class="fadeIn second" name="register" placeholder="first name">
                     <input type="text" id="lastName" class="fadeIn third" name="register" placeholder="last name">
                     <input type="submit"  class="fadeIn fourth" value="Register">
                 </form>
-            
+
                 <!-- Remind Passowrd -->
                 <div id="formFooter">
                     <a class="g-signin2" data-onsuccess="onSignIn"></a>
-                    <a class="underlineHover" href="#"> Login</a>
+                    <a href="#" onclick="signOut();">Sign out</a>
+                    <a class="underlineHover" onclick="checkLogin()" href="#"> Login</a>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -78,9 +79,10 @@
                 email : $('#emailLogin').val(),
                 password : $('#passwordLogin').val()
             }
+            console.log(input);
             $.ajax({
 					type: 'POST',
-					url: 'http://localhost:3000/login/',
+					url: 'http://localhost:3000/users/login/',
 					dataType: 'json',
 					data: input
 				})
@@ -93,22 +95,71 @@
                     console.log(error)
             })
         })
+        $('#register-form').submit(function(e){
+            e.preventDefault();
+            var input = {
+                email : $('#emailRegister').val(),
+                password : $('#passwordRegister').val(),
+                username : $('#firstName').val() + $('#lastName').val()
+                // firstName: $('#firstName').val(),
+                // lastName: $('#lastName').val()
+            }
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/users/register/',
+                dataType: 'json',
+                data: input
+            })
+            .done(function(dataLogin){
+                console.log(dataLogin,"ccccccc")
+                checkLogin()
+            })
+            .fail(function(error){
+                console.log(error)
+            })
+        })
+
         function checkLogin(){
             if(localStorage.getItem("token")){
                 $('#app').show()
                 $('#login').hide()
                 $('#register').hide()
-                getMyStar()
+                // getMyStar()
             }else{
                 $('#app').hide()
                 $('#register').hide()
-                $('#login').show()  
+                $('#login').show()
             }
         }
         function logout(){
             localStorage.removeItem('token')
             signOutGoogle()
             checkLogin()
+        }
+        function onSignIn(googleUser) {
+            var id_token = googleUser.getAuthResponse().id_token;
+            $.post({
+                url: `http://localhost:3000/users/login/google`,
+                context: document.body
+            }, {id_token: id_token})
+            .done(function(response) {
+                localStorage.setItem('token', response.token)
+                checkLogin();
+            })
+            .fail(function(error) {
+                console.log(error);
+            })
+        }
+        function register() {
+            $('#app').hide()
+            $('#register').show()
+            $('#login').hide()
+        }
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
         }
         </script>
 </body>
