@@ -2,6 +2,9 @@ body {
   background-color: #7dc6eb;
     padding-top: 54px;
 }
+#app {
+  text-align: center;
+}
 .navbar {
     background-color: rgb(255, 153, 0);
 }
@@ -15,6 +18,9 @@ body {
     min-height: 100%;
     padding: 20px;
   }
+span {
+    padding: 0 10px;
+}
   
   #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
