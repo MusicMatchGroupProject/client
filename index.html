@@ -13,6 +13,7 @@
 </head>
 <body>
     <div id="app">
+<<<<<<< HEAD
         <div class="row">
 
         </div>
@@ -23,27 +24,35 @@
             
         </div>
 
+=======
+>>>>>>> almost finish
         <div class="container">
             <img src="http://cdn.jalanroot.com/images/profile/16082018203028-apple_music_logo_by_mattroxzworld-d982zrj.png" style="width: 10%; height:10%">
             <h1 class="title-app liniear-wipe">Music Match</h1> 
             <div class="input-group-append" style="margin-left:30%;text-align:center">
-                <input type="text" id="input-search" class="form-control" placeholder="Search song" aria-label="Search"
-                    aria-describedby="basic-addon2">
-                <button class="btn btn-outline-secondary bg-light" type="button" id="search"><i class="fas fa-microphone"></i></button>
+                <form id="search-form">
+                    <input type="text" id="input-search" class="form-control" placeholder="Search song" aria-label="Search"
+                        aria-describedby="basic-addon2">
+                    <button class="btn btn-outline-secondary bg-light" type="button" id="search"><i class="fas fa-microphone"></i></button>
+                </form>
             </div>
             <div class="form-check form-check-inline">
                 <span>
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="artist" checked>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="artist">
                     <label class="form-check-label" for="exampleRadios1">
                         Artist
                     </label>
                 </span>
                 <span>
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option1" checked>
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option1">
                     <label class="form-check-label" for="exampleRadios1">
                         Song Tittle
                     </label>
                 </span>
+            </div>
+        </div>
+        <div class="container" style="margin-top:20px">
+            <div class="row">
             </div>
         </div>
     </div>
@@ -119,6 +128,7 @@
                 const speechToText = event.results[0][0].transcript;
                 console.log(speechToText,"=======");
                 $('.form-control').val(speechToText);
+                Search(speechToText)
             }
             recognition.onspeechend = function() {
                 recognition.stop();
@@ -132,6 +142,12 @@
         }
         $('#search').click(function() {
             recognition.start();
+            console.log('Ready to receive a color command.');
+        })
+        $('#search-form').submit(function() {
+            event.preventDefault()
+            var speechToText = $('#input-search').val()
+            Search(speechToText)
             console.log('Ready to receive a color command.');
         })
         $('#login-form').submit(function(e){

@@ -21,6 +21,7 @@ body {
 span {
     padding: 0 10px;
 }
+audio { width: 200px; }
   
   #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
