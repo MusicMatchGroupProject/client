@@ -1,5 +1,5 @@
 function getTopSong () {
-    $.ajax({
+    $.ajax({    
         type: "get",
         url: "http://localhost:3000/musics",
         dataType: "json"
@@ -63,6 +63,32 @@ function getTopSong () {
         console.log(err)
     })
 }
+var translated = ''
+function translate(params){
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:3000/translate/`,
+        data :{
+            text : params
+        },
+        dataType: "json"
+    })
+    .done(response => {
+        translated = response.translatedText
+        console.log(translated,"===")
+        $('#lyricCard').append(`
+        
+                <div class="card text-white bg-info  mb-3" style="width: 100vh;">
+                    <strong> Translated </strong>
+                    <p class="container"> ${translated}</p>
+                </div>
+        `)
+    })
+    .catch(error => {
+        console.log(error)
+    })
+}
+        
 
 function Play(title, img ,songs) {
     $('.row').empty()
@@ -85,7 +111,6 @@ function Play(title, img ,songs) {
             url: `http://localhost:3000/musics/search/lyrics/${id}`
         })
         .done((response) => {
-            console.log(response.data,"=========")
             $('.row').append(
                 `
                 <div class="col-md-4">
@@ -119,14 +144,18 @@ function Play(title, img ,songs) {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" id="lyricCard">
                     <div class="card text-white bg-info  mb-3" style="width: 100vh;">
                         <h4 class="card-title">${data.track.track_name}</h4>
                         <h5 class="card-title">${data.track.artist_name}</h5>
-                        <p class="container"> ${response.data.message.body.lyrics.lyrics_body}</p>
+                        <p class="container"> ${response.data.message.body.lyrics.lyrics_body}  
+                            
+                            ${translated}
+                        </p>
                     </div>
                 </div>
             `)
+            translate(response.data.message.body.lyrics.lyrics_body)
         })
         .fail(error => {
             console.log(error)
@@ -168,6 +197,7 @@ function Search(keyword){
                 listgenre.forEach(element => {
                     genre.push(element.music_genre.music_genre_name)
                 });
+                
                 $('.row').append(
                     `
                     <div class="col-md-4">
